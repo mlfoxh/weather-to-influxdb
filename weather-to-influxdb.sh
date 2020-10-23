@@ -17,6 +17,10 @@ fi
 # Loop fetch/parse/send/wait forever
 while true
 do
+	# Log where data is being fetched for
+	LOCATION="$LATITUDE\,$LONGITUDE"
+	echo "Location: $LATITUDE, $LONGITUDE"
+
 	# Fetch raw data from api.weather.gov and airnowapi.org
 	echo "Fetching data from api.openweathermap.org..."
 	OPENWEATHERMAP=$(curl --silent "https://api.openweathermap.org/data/2.5/weather?lat=$LATITUDE&lon=$LONGITUDE&units=$UNITS&appid=$OPENWEATHERMAP_API_KEY")
@@ -46,26 +50,25 @@ do
 	echo "AQI Types: ${AQI_TYPES[@]}"
 	AQI_VALUES=($(echo $AIRNOW | jq -r '.[].AQI'))
 	echo "AQI Values: ${AQI_VALUES[@]}"
-
 	# declare empty string array to hold influxdb post data for aqi types/values, then populate
 	AQI_DATA=()
 	for (( i=0; i<${#AQI_TYPES[@]}; i++ ))
 	do
-		AQI_DATA+=("aqi,type=${AQI_TYPES[i]} value=${AQI_VALUES[i]}")
+		AQI_DATA+=("aqi,type=${AQI_TYPES[i]},location=$LOCATION value=${AQI_VALUES[i]}")
 	done
 
 	# Send values to InfluxDB
 	echo "Sending values to InfluxDB..."
 	curl -v --output /dev/null -i -XPOST "$INFLUXDB_ADDRESS/write?db=$INFLUXDB_DATABASE&u=$INFLUXDB_USER&p=$INFLUXDB_PASSWORD" --data-binary \
 		"$(printf "%s\n" "${AQI_DATA[@]}")
-		temp,type=observed value=$TEMP
-		temp,type=feels_like value=$FEELS_LIKE
-		pressure value=$PRESSURE
-		humidity value=$HUMIDITY
-		visibility value=$VISIBILITY
-		wind,type=speed value=$WIND_SPEED
-		wind,type=direction value=$WIND_DIR
-		clouds value=$CLOUDS"
+		temp,type=observed,location=$LOCATION value=$TEMP
+		temp,type=feels_like,location=$LOCATION value=$FEELS_LIKE
+		pressure,location=$LOCATION value=$PRESSURE
+		humidity,location=$LOCATION value=$HUMIDITY
+		visibility,location=$LOCATION value=$VISIBILITY
+		wind,type=speed,location=$LOCATION value=$WIND_SPEED
+		wind,type=direction,location=$LOCATION value=$WIND_DIR
+		clouds,location=$LOCATION value=$CLOUDS"
 
 	# Repeat after interval (seconds)
 	echo "Sleeping for $INTERVAL seconds..."
