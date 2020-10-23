@@ -7,8 +7,10 @@ RUN apk update && apk add \
     curl \
     jq
 
-ENV NWS_STATION=KNWS
-ENV AIRNOW_RSS_FEED=001
+ENV LATITUDE=0.00
+ENV LONGITUDE=0.00
+ENV OPENWEATHERMAP_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+ENV AIRNOW_API_KEY=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx
 ENV INFLUXDB_ADDRESS=http://influxdb.domain.tld:8086
 ENV INFLUXDB_DATABASE=database
 ENV INFLUXDB_USER=user
