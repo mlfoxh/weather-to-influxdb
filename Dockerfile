@@ -9,6 +9,7 @@ RUN apk update && apk add \
 
 ENV LATITUDE=0.00
 ENV LONGITUDE=0.00
+ENV UNITS=metric
 ENV OPENWEATHERMAP_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ENV AIRNOW_API_KEY=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx
 ENV INFLUXDB_ADDRESS=http://influxdb.domain.tld:8086
