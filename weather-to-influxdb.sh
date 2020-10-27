@@ -27,6 +27,7 @@ do
 	echo "Fetching data from airnowapi.org..."
 	AIRNOW=$(curl --silent "https://www.airnowapi.org/aq/observation/latLong/current/?format=application/json&latitude=$LATITUDE&longitude=$LONGITUDE&distance=50&API_KEY=$AIRNOW_API_KEY")
 
+	echo $OPENWEATHERMAP
 	# Parse Openweathermap data
 	TEMP=$(echo $OPENWEATHERMAP | jq '.main.temp')
 	echo "Temperature: $TEMP"
@@ -44,6 +45,10 @@ do
 	echo "Wind Direction: $WIND_DIR"
 	CLOUDS=$(echo $OPENWEATHERMAP | jq '.clouds.all')
 	echo "Cloud Cover: $CLOUDS"
+	RAIN=$(echo $OPENWEATHERMAP | jq '.rain["1h"] // 0') # Returns 0 if null
+	echo "Rain (last hour): $RAIN"
+	SNOW=$(echo $OPENWEATHERMAP | jq '.snow["1h"] // 0')
+	echo "Snow (last hour): $SNOW"
 
 	# Parse AQI data
 	AQI_TYPES=($(echo $AIRNOW | jq -r '.[].ParameterName'))
@@ -68,7 +73,9 @@ do
 		visibility,location=$LOCATION value=$VISIBILITY
 		wind,type=speed,location=$LOCATION value=$WIND_SPEED
 		wind,type=direction,location=$LOCATION value=$WIND_DIR
-		clouds,location=$LOCATION value=$CLOUDS"
+		clouds,location=$LOCATION value=$CLOUDS
+		rain,location=$LOCATION value=$RAIN
+		snow,location=$LOCATION value=$SNOW"
 
 	# Repeat after interval (seconds)
 	echo "Sleeping for $INTERVAL seconds..."
