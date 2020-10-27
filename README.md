@@ -1,8 +1,31 @@
 # weather-to-influxdb
 Bash script which curls and parses openweathermap and airnow data for specified
-lat/long coordinates, and sends to InfluxDB
+latitude/longitude coordinates, and sends to InfluxDB.
 
-Requirements:
--openweathermap.org API Key
--airnowapi.org API Key
--curl, jq (if running as standalone script)
+Can be run as standalone script; also includes Dockerfile to use in Docker container.
+
+## Requirements:
+* [openweathermap.org API Key](https://openweathermap.org/appid)
+* [airnowapi.org API Key](https://docs.airnowapi.org/account/request/)
+### If running as standalone script, the following packages are required:
+* curl
+* jq
+
+## Configuration:
+Configuration options are sourced from the config file if running as standalone, or
+from ENV variables if running in a Docker container.
+### If running as Docker container:
+Set the following ENV variables eiter at runtime or in Dockerfile:
+* LATITUDE="0.00"
+* LONGITUDE="0.00"
+* UNITS="metric" or "imperial" (sets temperature units)
+* OPENWEATHERMAP_API_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+* AIRNOW_API_KEY="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"
+* INFLUXDB_ADDRESS="http://influxdb.domain.tld:8086"
+* INFLUXDB_DATABASE="database"
+* INFLUXDB_USER="user"
+* INFLUXDB_PASSWORD="password"
+* INTERVAL="900" (how long the script waits before running again)
+
+### If running as standalone script:
+* Edit the config file to set all options, same as above.
