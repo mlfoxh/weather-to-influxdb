@@ -27,8 +27,7 @@ do
 	echo "Fetching data from airnowapi.org..."
 	AIRNOW=$(curl --silent "https://www.airnowapi.org/aq/observation/latLong/current/?format=application/json&latitude=$LATITUDE&longitude=$LONGITUDE&distance=50&API_KEY=$AIRNOW_API_KEY")
 
-	echo $OPENWEATHERMAP
-	# Parse Openweathermap data
+	# Parse Openweathermap data and print to stdout for logging
 	TEMP=$(echo $OPENWEATHERMAP | jq '.main.temp')
 	echo "Temperature: $TEMP"
 	FEELS_LIKE=$(echo $OPENWEATHERMAP | jq '.main.feels_like')
@@ -66,13 +65,13 @@ do
 	echo "Sending values to InfluxDB..."
 	curl -v --output /dev/null -i -XPOST "$INFLUXDB_ADDRESS/write?db=$INFLUXDB_DATABASE&u=$INFLUXDB_USER&p=$INFLUXDB_PASSWORD" --data-binary \
 		"$(printf "%s\n" "${AQI_DATA[@]}")
-		temp,type=observed,location=$LOCATION value=$TEMP
-		temp,type=feels_like,location=$LOCATION value=$FEELS_LIKE
+		temp,location=$LOCATION value=$TEMP
+		temp_feels_like,location=$LOCATION value=$FEELS_LIKE
 		pressure,location=$LOCATION value=$PRESSURE
 		humidity,location=$LOCATION value=$HUMIDITY
 		visibility,location=$LOCATION value=$VISIBILITY
-		wind,type=speed,location=$LOCATION value=$WIND_SPEED
-		wind,type=direction,location=$LOCATION value=$WIND_DIR
+		wind_speed,location=$LOCATION value=$WIND_SPEED
+		wind_direction,location=$LOCATION value=$WIND_DIR
 		clouds,location=$LOCATION value=$CLOUDS
 		rain,location=$LOCATION value=$RAIN
 		snow,location=$LOCATION value=$SNOW"
