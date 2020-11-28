@@ -1,5 +1,7 @@
 LATITUDE="0.00"
 LONGITUDE="0.00"
+WEATHER_ON="true"
+AQI_ON="true"
 UNITS="metric"
 OPENWEATHERMAP_API_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 AIRNOW_API_KEY="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"
