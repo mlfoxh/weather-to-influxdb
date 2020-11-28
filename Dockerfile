@@ -9,6 +9,7 @@ RUN apk update && apk add \
 
 ENV LATITUDE=0.00
 ENV LONGITUDE=0.00
+ENV LOCATION_NAME=city
 ENV WEATHER_ON=true
 ENV AQI_ON=true
 ENV UNITS=metric

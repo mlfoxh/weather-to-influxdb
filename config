@@ -1,5 +1,6 @@
 LATITUDE="0.00"
 LONGITUDE="0.00"
+LOCATION_NAME="city"
 WEATHER_ON="true"
 AQI_ON="true"
 UNITS="metric"

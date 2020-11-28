@@ -52,16 +52,16 @@ do
 		# send values to influxdb
 		echo "Sending weather values to InfluxDB..."
 		curl -v --output /dev/null -i -XPOST "$INFLUXDB_ADDRESS/write?db=$INFLUXDB_DATABASE&u=$INFLUXDB_USER&p=$INFLUXDB_PASSWORD" --data-binary \
-			"temp,location=$LOCATION value=$TEMP
-			temp_feels_like,location=$LOCATION value=$FEELS_LIKE
-			pressure,location=$LOCATION value=$PRESSURE
-			humidity,location=$LOCATION value=$HUMIDITY
-			visibility,location=$LOCATION value=$VISIBILITY
-			wind_speed,location=$LOCATION value=$WIND_SPEED
-			wind_direction,location=$LOCATION value=$WIND_DIR
-			clouds,location=$LOCATION value=$CLOUDS
-			rain,location=$LOCATION value=$RAIN
-			snow,location=$LOCATION value=$SNOW"
+			"temp,location=$LOCATION,location_name=$LOCATION_NAME value=$TEMP
+			temp_feels_like,location=$LOCATION,location_name=$LOCATION_NAME value=$FEELS_LIKE
+			pressure,location=$LOCATION,location_name=$LOCATION_NAME value=$PRESSURE
+			humidity,location=$LOCATION,location_name=$LOCATION_NAME value=$HUMIDITY
+			visibility,location=$LOCATION,location_name=$LOCATION_NAME value=$VISIBILITY
+			wind_speed,location=$LOCATION,location_name=$LOCATION_NAME value=$WIND_SPEED
+			wind_direction,location=$LOCATION,location_name=$LOCATION_NAME value=$WIND_DIR
+			clouds,location=$LOCATION,location_name=$LOCATION_NAME value=$CLOUDS
+			rain,location=$LOCATION,location_name=$LOCATION_NAME value=$RAIN
+			snow,location=$LOCATION,location_name=$LOCATION_NAME value=$SNOW"
 	fi
 
 	# fetch, parse, and send aqi data if aqi is configured on
@@ -80,7 +80,7 @@ do
 		AQI_DATA=()
 		for (( i=0; i<${#AQI_TYPES[@]}; i++ ))
 		do
-			AQI_DATA+=("aqi,type=${AQI_TYPES[i]},location=$LOCATION value=${AQI_VALUES[i]}")
+			AQI_DATA+=("aqi,type=${AQI_TYPES[i]},location=$LOCATION,location_name=$LOCATION_NAME value=${AQI_VALUES[i]}")
 		done
 		# send values to influxdb
 		echo "Sending AQI values to InfluxDB..."
