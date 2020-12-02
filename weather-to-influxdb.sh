@@ -22,13 +22,15 @@ do
 	echo "Location: $LATITUDE, $LONGITUDE"
 
 	# fetch, parse, and send weather data if weather is configured on
-	if [ $WEATHER_ON != "false" ]
+	if [ $WEATHER_ENABLED != "false" ]
 	then
 		# fetch raw data from api.openweathermap.org
 		echo "Fetching data from api.openweathermap.org..."
 		OPENWEATHERMAP=$(curl --silent "https://api.openweathermap.org/data/2.5/weather?lat=$LATITUDE&lon=$LONGITUDE&units=$UNITS&appid=$OPENWEATHERMAP_API_KEY")
 
 		# parse openweathermap data and print to stdout for logging
+		DESCRIPTION=$(echo $OPENWEATHERMAP | jq '.weather[0].description')
+		echo "Weather: $DESCRIPTION"
 		TEMP=$(echo $OPENWEATHERMAP | jq '.main.temp')
 		echo "Temperature: $TEMP"
 		FEELS_LIKE=$(echo $OPENWEATHERMAP | jq '.main.feels_like')
@@ -52,7 +54,8 @@ do
 		# send values to influxdb
 		echo "Sending weather values to InfluxDB..."
 		curl -v --output /dev/null -i -XPOST "$INFLUXDB_ADDRESS/write?db=$INFLUXDB_DATABASE&u=$INFLUXDB_USER&p=$INFLUXDB_PASSWORD" --data-binary \
-			"temp,location=$LOCATION,location_name=$LOCATION_NAME value=$TEMP
+			"description,location=$LOCATION,location_name=$LOCATION_NAME value=$DESCRIPTION
+			temp,location=$LOCATION,location_name=$LOCATION_NAME value=$TEMP
 			temp_feels_like,location=$LOCATION,location_name=$LOCATION_NAME value=$FEELS_LIKE
 			pressure,location=$LOCATION,location_name=$LOCATION_NAME value=$PRESSURE
 			humidity,location=$LOCATION,location_name=$LOCATION_NAME value=$HUMIDITY
@@ -65,7 +68,7 @@ do
 	fi
 
 	# fetch, parse, and send aqi data if aqi is configured on
-	if [ $AQI_ON != "false" ]
+	if [ $AQI_ENABLED != "false" ]
 	then
 		# fetch raw data from airnowapi.org
 		echo "Fetching data from airnowapi.org..."

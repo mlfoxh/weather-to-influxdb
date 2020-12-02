@@ -1,8 +1,8 @@
 LATITUDE="0.00"
 LONGITUDE="0.00"
-LOCATION_NAME="city"
-WEATHER_ON="true"
-AQI_ON="true"
+LOCATION_NAME="city" # No spaces allowed, please use underscores instead
+WEATHER_ENABLED="true"
+AQI_ENABLED="true"
 UNITS="metric"
 OPENWEATHERMAP_API_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 AIRNOW_API_KEY="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"
