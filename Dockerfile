@@ -10,8 +10,8 @@ RUN apk update && apk add \
 ENV LATITUDE=0.00
 ENV LONGITUDE=0.00
 ENV LOCATION_NAME=city
-ENV WEATHER_ON=true
-ENV AQI_ON=true
+ENV WEATHER_ENABLED=true
+ENV AQI_ENABLED=true
 ENV UNITS=metric
 ENV OPENWEATHERMAP_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ENV AIRNOW_API_KEY=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx
